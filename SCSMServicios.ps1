@@ -4,7 +4,8 @@ Ejecutar como administrador
 #>
 
 
-$lista = ("HealthService","OMSDK", "OMCFG") # Array
+$lista1 = ("HealthService","OMSDK", "OMCFG") # Array
+$lista2 = ("OMCFG","OMSDK","HealthService") # Array
 
 function sevicioexiste($serviciosc)
 {
@@ -127,7 +128,7 @@ function borrarcarpeta ()
 }
 
 
-foreach ($servicio in $lista) # Leer Array $lista
+foreach ($servicio in $lista1) # Leer Array $lista
 { 
     
     $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
@@ -135,14 +136,14 @@ foreach ($servicio in $lista) # Leer Array $lista
 }
 
 
-foreach ($servicio in $lista) # Leer Array $lista
+foreach ($servicio in $lista1) # Leer Array $lista
 { 
     
     $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
     seviciodetenido $serviciosc # Enviar valor de la variable a la funcion
 }
 
-foreach ($servicio in $lista) # Leer Array $lista
+foreach ($servicio in $lista2) # Leer Array $lista
 { 
     
     $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
@@ -151,7 +152,7 @@ foreach ($servicio in $lista) # Leer Array $lista
 }
 
 Clear-Host
-foreach ($servicio in $lista) # Leer Array $lista
+foreach ($servicio in $lista1) # Leer Array $lista
 { 
     
     $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc

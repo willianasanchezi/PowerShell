@@ -1,88 +1,159 @@
-<# Ejecutar como administrador #>
-
-
 <# 
-La siguiente funcion valida sino existe un servicio
+Willian Sanchez Ibañez
+Ejecutar como administrador 
 #>
-function sevicioexiste ()
+
+
+$lista = ("HealthService","OMSDK", "OMCFG") # Array
+
+function sevicioexiste($serviciosc)
 {
-    Clear-Host
-    $consulta1 = Get-Service | Where-Object {$_.Name -eq "Audiosrv"}
-    Clear-Host
+    
+    $consulta1 = Get-Service | Where-Object {$_.Name -eq $serviciosc}
     # Signo de ! es -not o not equal
     if (!$consulta1)
     {
-        $aviso1 = "NoExiste"
+        $aviso1 = "No Existe el servicio $serviciosc"
     }
     else
     {
-            # Inicia detener servicio
-            Clear-Host
-            $consulta = Get-Service | Where-Object {$_.Name -eq "Audiosrv" -band $_.Status -eq "Running"}
-            Clear-Host
+            # Inicio: detener servicio
+            
+            $consulta2 = Get-Service | Where-Object {$_.Name -eq $serviciosc -band $_.Status -eq "Running"}
+            
             # Signo de ! es -not o not equal
-            if (!$consulta)
+            if (!$consulta2)
             {
-                $aviso2 = "No esta Running"
+                $aviso2 = "Running1 $serviciosc"
             }
             else
             {
-                $aviso2 = "Esta Running"
-                Stop-Service -Name "Audiosrv"
-                Start-Sleep -s 30
-                # Llama la funcion borrarcarpeta
-                borrarcarpeta
+                $aviso2 = "Running2 $serviciosc"
+                Stop-Service -Name $serviciosc
                 
             }
             $aviso2
-            # Fin detener servicio
+            # Fin: detener servicio
     }
     $aviso1
 }
-#
+
+
+
+function seviciodetenido($serviciosc)
+{
+    
+    $consulta1 = Get-Service | Where-Object {$_.Name -eq $serviciosc}
+    if (!$consulta1)
+    {
+        $aviso1 = "No Existe el servicio $serviciosc"
+    }
+    else
+    {
+            # Inicio
+            
+            $consulta2 = Get-Service | Where-Object {$_.Name -eq $serviciosc -band $_.Status -eq "Stopped"}
+            
+            # Signo de ! es -not o not equal
+            if (!$consulta2)
+            {
+                $aviso2 = "Stopped1 $serviciosc"                
+            }
+            else
+            {
+                $aviso2 = "Stopped2 $serviciosc"
+                borrarcarpeta # Ejecutar la funcion
+            }
+            $aviso2
+            # Fin
+    }
+    $aviso1
+}
+
+function seviciosubir($serviciosc)
+{
+    
+    $consulta1 = Get-Service | Where-Object {$_.Name -eq $serviciosc}
+    if (!$consulta1)
+    {
+        $aviso1 = "No Existe el servicio $serviciosc"
+    }
+    else
+    {
+            # Inicio
+            
+            $consulta2 = Get-Service | Where-Object {$_.Name -eq $serviciosc -band $_.Status -eq "Stopped"}
+            
+            if (!$consulta2)
+            {
+                $aviso2 = "Start1 $serviciosc"
+            }
+            else
+            {
+                $aviso2 = "Start2 $serviciosc"
+                Start-Service -Name $serviciosc 
+            }
+            $aviso2
+            # Fin
+    }
+    $aviso1
+}
 
 function borrarcarpeta ()
 {
-    Clear-Host
+    
     do
-        {
-        # Consulta de estado del servicio
-        $consulta = Get-Service | Where-Object {$_.Name -eq "Audiosrv" -band $_.Status -eq "Stopped"}  
-        }
-        # Mientras el servicio no se encuentre running se va a seguir ejecutando la consulta, hasta que pase a Stopped
-    while (!$consulta)
+        {       
+        $consulta3 = Get-Service | Where-Object {$_.Name -eq "Audiosrv" -band $_.Status -eq "Stopped"}  # Consulta de estado del servicio
+        }       
+    while (!$consulta3) # Mientras el servicio no se encuentre detenido se va a seguir ejecutando la consulta
     
     
-    # Colocamos la ruta en una variable
-    $ruta1 = "C:\Windows\Temp\"
-    # Con el comando Test-Path validamos la ruta, si existe de True sino da False
-    $existeruta = Test-Path $ruta1
-    # Validamos si el resultado del test es True o False
-    if ($existeruta -eq $True)
-        {
-        # Si es True se guarda el siguiente texto en la variable $aviso
-        $aviso = "Archivo Existe"
-        # Inicio Borrar Carpetas
-        Remove-Item C:\Windows\Temp\ -Recurse
-        Remove-Item C:\Windows\SoftwareDistribution\ -Recurse
-        # Fin Borrar Carpetas
-        Start-Sleep -s 30
+    
+    $ruta1 = "C:\Program Files\Microsoft System Center 2012 R2\Service Manager\Health Service State" # Colocamos la ruta en una variable
+    $existeruta = Test-Path $ruta1 # Con el comando Test-Path validamos la ruta, si existe de True sino da False
+    
+    if ($existeruta -eq $True) # Validamos si el resultado del test es True o False
+        {       
+        $aviso = "Archivo Existe" # Si es True se guarda el siguiente texto en la variable $aviso
+        Remove-Item "C:\Program Files\Microsoft System Center 2012 R2\Service Manager\Health Service State" -Recurse # Inicio Borrar Carpetas      
         }
     else
-        {
-        # Si es False se guarda el siguiente texto en la variable $aviso
-        $aviso = "Archivo No Existe"
+        {        
+        $aviso = "Archivo No Existe" # Si es False se guarda el siguiente texto en la variable $aviso
         }
-    # Limpia pantalla
-    Clear-Host
-
-    Start-Service -Name "Audiosrv"
-    # En la siguiente variable se muestra el resultado del aviso
     $aviso            
 }
 
-sevicioexiste
 
-#Iniciar Servicio
-#
+foreach ($servicio in $lista) # Leer Array $lista
+{ 
+    
+    $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
+    sevicioexiste $serviciosc # Enviar valor de la variable a la funcion
+}
+
+
+foreach ($servicio in $lista) # Leer Array $lista
+{ 
+    
+    $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
+    seviciodetenido $serviciosc # Enviar valor de la variable a la funcion
+}
+
+foreach ($servicio in $lista) # Leer Array $lista
+{ 
+    
+    $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
+    seviciosubir $serviciosc # Enviar valor de la variable a la funcion
+    Get-Service $serviciosc
+}
+
+Clear-Host
+foreach ($servicio in $lista) # Leer Array $lista
+{ 
+    
+    $serviciosc = $servicio # Guardar el valor de lo consultado en el array en la variable $serviciosc
+    Get-Service $serviciosc
+}
 

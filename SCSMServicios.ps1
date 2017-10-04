@@ -4,7 +4,7 @@ Ejecutar como administrador
 #>
 
 
-$lista1 = ("HealthService","OMSDK", "OMCFG") # Array
+$lista1 = ("HealthService","OMSDK","OMCFG") # Array
 $lista2 = ("OMCFG","OMSDK","HealthService") # Array
 
 function sevicioexiste($serviciosc)

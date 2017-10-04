@@ -10,7 +10,7 @@ function sevicioexiste($serviciosc)
 {
     
     $consulta1 = Get-Service | Where-Object {$_.Name -eq $serviciosc}
-    # Signo de ! es -not o not equal
+    # Signo de ! es -not 
     if (!$consulta1)
     {
         $aviso1 = "No Existe el servicio $serviciosc"
@@ -54,7 +54,7 @@ function seviciodetenido($serviciosc)
             
             $consulta2 = Get-Service | Where-Object {$_.Name -eq $serviciosc -band $_.Status -eq "Stopped"}
             
-            # Signo de ! es -not o not equal
+            # Signo de ! es -not
             if (!$consulta2)
             {
                 $aviso2 = "Stopped1 $serviciosc"                
@@ -105,6 +105,7 @@ function borrarcarpeta ()
     do
         {       
         $consulta3 = Get-Service | Where-Object {$_.Name -eq "Audiosrv" -band $_.Status -eq "Stopped"}  # Consulta de estado del servicio
+        Start-Sleep -s 10 # Para que no consuma memoria RAM
         }       
     while (!$consulta3) # Mientras el servicio no se encuentre detenido se va a seguir ejecutando la consulta
     
